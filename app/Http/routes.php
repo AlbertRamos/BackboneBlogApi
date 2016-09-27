@@ -15,7 +15,7 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    abort(404);
 });
 
 Route::get('token', function () {
@@ -34,14 +34,14 @@ Route::get('token', function () {
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-
-Route::group(['middleware' => ['web']], function () {
-    //
-    Route::resource('posts', 'PostsController');
-});
-
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+    Route::resource('posts', 'PostsController');
 
-    Route::get('/home', 'HomeController@index');
+
+
+    Route::group(['prefix' => 'panel'], function () {
+        Route::get('/', 'HomeController@index');
+    });
+
 });
