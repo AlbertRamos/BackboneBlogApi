@@ -36,9 +36,17 @@ Route::get('token', function () {
 */
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
-    Route::resource('posts', 'PostsController');
+    Route::get('posts', 'PostsController@index');
 
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/posts_list', 'PostsController@postList');
+        Route::get('/posts/create', ['as' => 'posts.create', 'uses' => 'PostsController@create']);
+        Route::get('/posts/{id}/edit', ['as' => 'posts.edit', 'uses' => 'PostsController@edit']);
 
+        Route::post('/posts/{id}/edit', ['as' => 'posts.update', 'uses' => 'PostsController@update']);
+        Route::post('/posts', ['as' => 'posts.store', 'uses' => 'PostsController@store']);
+        Route::delete('/posts/{id}', ['as' => 'posts.destroy', 'uses' => 'PostsController@destroy']);
+    });
 
     Route::group(['prefix' => 'panel'], function () {
         Route::get('/', 'HomeController@index');

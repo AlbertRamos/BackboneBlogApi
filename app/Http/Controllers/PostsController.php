@@ -18,10 +18,16 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
         return $posts;
+    }
+
+    public function postList(Request $request)
+    {
+        $posts = Post::orderBy('created_at', 'desc')->paginate(10);
+        return view('posts.posts_list', compact('posts'));
     }
 
     /**
@@ -31,7 +37,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -42,7 +48,48 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $this->savePost($request);
+
+        } catch(Exception $e){
+            $request->session()->flash('error', $e->getMessage());
+            return back();
+        }
+
+        $request->session()->flash('message', 'Entry created successfully');
+        return back();
+    }
+
+
+    /**
+     * Create or edit a post
+     *
+     * @param $request
+     * @param null $id
+     * @return bool
+     */
+    public function savePost($request, $id = null){
+        if ($request->hasFile('image_header')) {
+
+            $path = 'uploads/';
+            $filename = str_random(5) .'_'. $request->file('image_header')->getClientOriginalName();
+            $request->file('image_header')->move($path, $filename);
+            $request->full_path = $path . $filename;
+        }
+
+        if(is_null($id))
+            $post = new Post();
+        else
+            $post = Post::find($id);
+
+        $post->title = $request->title;
+        $post->summary = $request->summary;
+        $post->content = $request->content;
+        $post->image_header = $request->full_path;
+        $post->user_id = auth()->user()->id;
+        $post->date = $request->created_at;
+        return $post->save();
     }
 
     /**
@@ -65,7 +112,8 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -77,13 +125,8 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = Post::find($id);
-
-        $post->title = $request->title;
-        $post->content = $request->input('content');
-        $post->save();
-
-        return $post;
+        $this->savePost($request, $id);
+        return back();
     }
 
     /**
@@ -94,6 +137,7 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Post::destroy($id);
+        return back();
     }
 }
