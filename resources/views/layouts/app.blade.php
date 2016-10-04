@@ -50,6 +50,10 @@
         .dropdown-menu {
             border:0;
         }
+        .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+            color:white;
+        }
+
         /**
         pages
         */
@@ -138,7 +142,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Albert Ramos
                 </a>
             </div>
 
@@ -153,7 +157,7 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url('/posts_list') }}"><i class="fa fa-btn fa-list-ul"></i>All</a></li>
-                            <li><a href="{{ url('/posts/create') }}"><i class="fa fa-btn fa-plus"></i>New</a></li>
+                            <li><a href="{{ url('/post/new') }}"><i class="fa fa-btn fa-plus"></i>New</a></li>
                         </ul>
                     </li>
                 </ul>

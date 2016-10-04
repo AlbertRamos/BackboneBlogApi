@@ -37,19 +37,20 @@ Route::get('token', function () {
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
     Route::get('posts', 'PostsController@index');
+    Route::get('posts/{id}', 'PostsController@show');
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/posts_list', 'PostsController@postList');
-        Route::get('/posts/create', ['as' => 'posts.create', 'uses' => 'PostsController@create']);
-        Route::get('/posts/{id}/edit', ['as' => 'posts.edit', 'uses' => 'PostsController@edit']);
+        Route::get('/post/new', ['as' => 'post.create', 'uses' => 'PostsController@create']);
+        Route::get('/post/{id}/edit', ['as' => 'post.edit', 'uses' => 'PostsController@edit']);
 
-        Route::post('/posts/{id}/edit', ['as' => 'posts.update', 'uses' => 'PostsController@update']);
-        Route::post('/posts', ['as' => 'posts.store', 'uses' => 'PostsController@store']);
-        Route::delete('/posts/{id}', ['as' => 'posts.destroy', 'uses' => 'PostsController@destroy']);
+        Route::post('/post/{id}/edit', ['as' => 'post.update', 'uses' => 'PostsController@update']);
+        Route::post('/post', ['as' => 'post.store', 'uses' => 'PostsController@store']);
+        Route::delete('/post/{id}', ['as' => 'post.destroy', 'uses' => 'PostsController@destroy']);
     });
 
     Route::group(['prefix' => 'panel'], function () {
-        Route::get('/', 'HomeController@index');
+        Route::get('/', ['as' => 'panel', 'uses' => 'HomeController@index']);
     });
 
 });
