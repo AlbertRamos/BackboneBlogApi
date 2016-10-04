@@ -148,6 +148,7 @@
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
+                @if (!Auth::guest())
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/panel') }}">Home</a></li>
                     <li class="dropdown">
@@ -155,20 +156,19 @@
                             Posts <span class="caret"></span>
                         </a>
 
+
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url('/posts_list') }}"><i class="fa fa-btn fa-list-ul"></i>All</a></li>
                             <li><a href="{{ url('/post/new') }}"><i class="fa fa-btn fa-plus"></i>New</a></li>
                         </ul>
                     </li>
                 </ul>
+                @endif
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
-                    @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
-                        <li><a href="{{ url('/register') }}">Register</a></li>
-                    @else
+                    @if (!Auth::guest())
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>
