@@ -20,7 +20,7 @@ class PostsController extends Controller
      */
     public function index(Request $request)
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
+        $posts = Post::with('user')->orderBy('created_at', 'desc')->paginate(3);
         return $posts;
     }
 
@@ -69,24 +69,26 @@ class PostsController extends Controller
      * @return bool
      */
     public function savePost($request, $id = null){
-        if ($request->hasFile('image_header')) {
-
-            $path = 'uploads/';
-            $filename = str_random(5) .'_'. $request->file('image_header')->getClientOriginalName();
-            $request->file('image_header')->move($path, $filename);
-            $request->full_path = $path . $filename;
-        }
-
         if(is_null($id))
             $post = new Post();
         else
             $post = Post::find($id);
 
+        if ($request->hasFile('image_header')) {
+            //dd($request->file('image_header'));
+            $path = 'uploads/';
+            $filename = str_random(5) .'_'. $request->file('image_header')->getClientOriginalName();
+            $request->file('image_header')->move($path, $filename);
+            $full_path = $path . $filename;
+        } else {
+            $full_path = $post->image_header;
+        }
+
         $post->title = $request->title;
         $post->slug = str_slug($request->title);
         $post->summary = $request->summary;
         $post->content = $request->content;
-        $post->image_header = $request->full_path;
+        $post->image_header = $full_path;
         $post->user_id = auth()->user()->id;
         $post->date = $request->created_at;
         $post->save();
