@@ -49,16 +49,15 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         try {
-
-            $this->savePost($request);
+            $post = $this->savePost($request);
+            
+            $request->session()->flash('message', 'Post created successfully');
+            return redirect(route('post.edit', $post->id));
 
         } catch(Exception $e){
             $request->session()->flash('error', $e->getMessage());
             return back();
         }
-
-        $request->session()->flash('message', 'Entry created successfully');
-        return back();
     }
 
 
@@ -90,7 +89,8 @@ class PostsController extends Controller
         $post->image_header = $request->full_path;
         $post->user_id = auth()->user()->id;
         $post->date = $request->created_at;
-        return $post->save();
+        $post->save();
+        return $post;
     }
 
     /**

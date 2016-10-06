@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillables = ['date', 'updated_at', 'created_at'];
+    protected $fillables = ['id', 'slug', 'date', 'updated_at', 'created_at'];
 
     public function user(){
         return $this->belongsTo('App\User');
