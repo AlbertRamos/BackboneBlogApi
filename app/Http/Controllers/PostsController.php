@@ -84,6 +84,7 @@ class PostsController extends Controller
             $post = Post::find($id);
 
         $post->title = $request->title;
+        $post->slug = str_slug($request->title);
         $post->summary = $request->summary;
         $post->content = $request->content;
         $post->image_header = $request->full_path;
@@ -100,7 +101,7 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = Post::with('user')->find($id);
+        $post = Post::with('user')->where('slug', $id)->first();
         return $post;
     }
 
