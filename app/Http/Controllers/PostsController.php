@@ -76,13 +76,18 @@ class PostsController extends Controller
 
         if ($request->hasFile('image_header')) {
             //dd($request->file('image_header'));
+
             $path = 'uploads/';
+            //dd($path);
             $filename = str_random(5) .'_'. $request->file('image_header')->getClientOriginalName();
             $request->file('image_header')->move($path, $filename);
             $full_path = $path . $filename;
+            $full_path = url('/') .'/'. $full_path;
         } else {
             $full_path = $post->image_header;
         }
+
+
 
         $post->title = $request->title;
         $post->slug = str_slug($request->title);
