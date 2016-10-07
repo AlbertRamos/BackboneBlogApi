@@ -14,7 +14,7 @@
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                color: #B0BEC5;
+                color: #547c90;
                 display: table;
                 font-weight: 100;
                 font-family: 'Lato';
@@ -40,7 +40,8 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">Leave me alone.</div>
+                <div class="title">please</div>
             </div>
         </div>
     </body>
