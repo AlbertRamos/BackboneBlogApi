@@ -41,7 +41,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">Leave me alone.</div>
-                <div class="title">please</div>
+                <div class="subtitle">please</div>
             </div>
         </div>
     </body>
